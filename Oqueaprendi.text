@@ -1,0 +1,13 @@
+verificação com o zod
+criando o arquivo env.ts para mapear as variáveis de ambiente
+
+depois de instalar o prisma devemos executar o comando de inicialização passando o tipo de provider de acordo com o banco 
+pnpm exec prisma init --datasource-provider SQlite
+
+
+Métodos HTTP: GET, POST, DELETE, PUT, PATCH, HEAD, OPTION...
+
+REQUEST BODY = utilizados nos métodos post, enviados com o content-type: application/json  
+PARAMS = parâmetros que são nomeados geralmente usados para paginação ou pesquisa ex: http://localhost:3333/user?name=Diego
+ROUTE PARAMS = Identificação de recursos DELETE HTTP://localhost:3333/users/5
+cabeçalhos (header) => contexto utilizados como chave de autentificação por exemplo  

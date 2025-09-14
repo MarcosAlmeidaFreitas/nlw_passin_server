@@ -1,0 +1,18 @@
+meta {
+  name: CreateAttendee
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/events/e33f736e-d139-4719-84e1-886aeb9a3840/attendees
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "joao",
+    "email": "joao@hotmail.com"
+  }
+}

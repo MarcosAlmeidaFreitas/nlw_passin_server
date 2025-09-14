@@ -1,0 +1,19 @@
+meta {
+  name: CreateEvent
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/events
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Evento para 5 pessoas",
+    "details": "melhor de todos os eventos",
+    "maximumAttendees": 4
+  }
+}

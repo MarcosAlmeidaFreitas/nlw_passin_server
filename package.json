@@ -1,0 +1,31 @@
+{
+  "name": "nlw_passin_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --env-file .env --watch --experimental-strip-types src/server.ts",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/swagger": "^9.5.1",
+    "@prisma/client": "^6.16.1",
+    "@scalar/fastify-api-reference": "^1.35.3",
+    "fastify": "^5.6.0",
+    "fastify-type-provider-zod": "^6.0.0",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.2",
+    "@types/node": "^24.3.1",
+    "pino-pretty": "^13.1.1",
+    "prisma": "^6.16.1",
+    "typescript": "^5.9.2",
+    "ultracite": "5.3.3"
+  },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
+}

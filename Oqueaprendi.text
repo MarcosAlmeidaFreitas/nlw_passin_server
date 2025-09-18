@@ -11,3 +11,7 @@ REQUEST BODY = utilizados nos métodos post, enviados com o content-type: applic
 PARAMS = parâmetros que são nomeados geralmente usados para paginação ou pesquisa ex: http://localhost:3333/user?name=Diego
 ROUTE PARAMS = Identificação de recursos DELETE HTTP://localhost:3333/users/5
 cabeçalhos (header) => contexto utilizados como chave de autentificação por exemplo  
+
+qual a diferença entre nullable e nullish 
+  nullable => o texto vindo pode ser nulo mas não pode ser undefined
+  nullish => pode ser nulo e pode ser undefined

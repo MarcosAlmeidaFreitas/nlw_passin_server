@@ -4,6 +4,7 @@ import z from "zod"
 import { prisma_client } from "../client/prisma_client.ts"
 import { HTTP_Status_Code } from "../status_code/index.ts"
 import { generateSlug } from "../utils/generateSlug.ts"
+import { BadRequest } from "./_errors/badRequest.ts"
 
 const minTitle = 4
 
@@ -25,9 +26,9 @@ export const createEvent: FastifyPluginAsyncZod = async (server) => {
             eventId: z.string(),
             slug: z.string(),
           }),
-          400: z.object({
-            message: z.string()
-          })
+          // 400: z.object({
+          //   message: z.string()
+          // })
         },
       },
     },
@@ -43,7 +44,8 @@ export const createEvent: FastifyPluginAsyncZod = async (server) => {
       })
 
       if(eventWithSameSlug !== null) {
-        return reply.status(HTTP_Status_Code.BAD_REQUEST).send({message: "Another event with same title already exists."})
+        throw new BadRequest("Another event with same title already exists.")
+        //return reply.status(HTTP_Status_Code.BAD_REQUEST).send({message: "Another event with same title already exists."})
       }
 
       const event = await prisma_client.event.create({

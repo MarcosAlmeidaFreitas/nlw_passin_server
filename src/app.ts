@@ -1,5 +1,9 @@
 /** biome-ignore-all lint/suspicious/noConsole: <explanation> */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: <explanation> */
+
+import { fastifyCors } from "@fastify/cors"
+import fastifySwagger from "@fastify/swagger"
+import scalarAPIReference from "@scalar/fastify-api-reference"
 import fastify from "fastify"
 import {
   jsonSchemaTransform,
@@ -7,17 +11,16 @@ import {
   validatorCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod"
-import fastifySwagger from "@fastify/swagger"
-import scalarAPIReference from "@scalar/fastify-api-reference"
 import { env } from "./environment/env.ts"
-import { HTTP_Status_Code } from "./status_code/index.ts"
-import { createEvent } from "./routes/createEvents.ts"
-import { RegisterForEvent } from "./routes/registerForEvent.ts"
-import { GetEvents } from "./routes/getEvents.ts"
-import { getEvent } from "./routes/getEvent.ts"
-import { getAttendeeBadge } from "./routes/getAttendeeBadge.ts"
 import { checkIn } from "./routes/checkIn.ts"
+import { createEvent } from "./routes/createEvents.ts"
+import { getAttendeeBadge } from "./routes/getAttendeeBadge.ts"
 import { getAttendeesForEvent } from "./routes/getAttendeesforEvent.ts"
+import { getEvent } from "./routes/getEvent.ts"
+import { GetEvents } from "./routes/getEvents.ts"
+import { RegisterForEvent } from "./routes/registerForEvent.ts"
+import { HTTP_Status_Code } from "./status_code/index.ts"
+import { errorHandler } from "./utils/error-handler.ts"
 
 const server = fastify({
   logger: {
@@ -33,35 +36,39 @@ const server = fastify({
   },
 }).withTypeProvider<ZodTypeProvider>()
 
-if(env.NODE_ENV === "development") {
+server.register(fastifyCors, {
+  origin: '*'
+})
+
+if (env.NODE_ENV === "development") {
   // registrando o swagger para gerar a documentação da API
   server.register(fastifySwagger, {
     openapi: {
       info: {
-        title: 'PASS_IN SERVER',
-        version: '1.0.0',
+        title: "PASS_IN SERVER",
+        version: "1.0.0",
       },
     },
     transform: jsonSchemaTransform,
   })
 
   server.register(scalarAPIReference, {
-    routePrefix: '/docs',
+    routePrefix: "/docs",
     configuration: {
-      theme: 'kepler',
+      theme: "kepler",
     },
   })
 
-  console.log('🚀 Rodando em modo desenvolvimento 🚀')
-}else {
-  console.log('🏭 Rodando em modo produção 🏭')
+  console.log("🚀 Rodando em modo desenvolvimento 🚀")
+} else {
+  console.log("🏭 Rodando em modo produção 🏭")
 }
 
 server.setSerializerCompiler(serializerCompiler)
 server.setValidatorCompiler(validatorCompiler)
 
-server.get('/health', (request, reply) => {
-  return reply.status(HTTP_Status_Code.OK).send({message: 'ok'})
+server.get("/health", (request, reply) => {
+  return reply.status(HTTP_Status_Code.OK).send({ message: "ok" })
 })
 
 server.register(createEvent)
@@ -72,4 +79,5 @@ server.register(getAttendeeBadge)
 server.register(checkIn)
 server.register(getAttendeesForEvent)
 
+server.setErrorHandler(errorHandler)
 export { server }

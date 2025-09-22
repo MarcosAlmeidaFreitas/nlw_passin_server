@@ -15,3 +15,7 @@ cabeçalhos (header) => contexto utilizados como chave de autentificação por e
 qual a diferença entre nullable e nullish 
   nullable => o texto vindo pode ser nulo mas não pode ser undefined
   nullish => pode ser nulo e pode ser undefined
+
+
+@fastify/cors
+para proteger a nossa api de ser acessada por outros front end indesejados

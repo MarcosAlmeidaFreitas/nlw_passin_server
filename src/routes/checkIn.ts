@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
 import z from "zod"
 import { prisma_client } from "../client/prisma_client.ts"
 import { HTTP_Status_Code } from "../status_code/index.ts"
+import { BadRequest } from "./_errors/badRequest.ts"
 
 export const checkIn: FastifyPluginAsyncZod = async (server) => {
   await server.get(
@@ -15,7 +16,7 @@ export const checkIn: FastifyPluginAsyncZod = async (server) => {
         }),
         response: {
           201: z.null(),
-          401: z.string()
+          //401: z.string()
         }
       },
     },
@@ -29,7 +30,8 @@ export const checkIn: FastifyPluginAsyncZod = async (server) => {
       })
 
       if(attendeeCheckIn !== null){
-        reply.status(HTTP_Status_Code.UNAUTHORIZED).send("Attendee already checked in")
+        throw new BadRequest('Attendee already checked in!')
+        //return reply.status(HTTP_Status_Code.UNAUTHORIZED).send("Attendee already checked in")
       }
 
       await prisma_client.checkIn.create({

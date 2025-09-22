@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
 import z from "zod"
 import { prisma_client } from "../client/prisma_client.ts"
 import { HTTP_Status_Code } from "../status_code/index.ts"
+import { BadRequest } from "./_errors/badRequest.ts"
 
 const minimalNameForName = 4
 export const RegisterForEvent: FastifyPluginAsyncZod = async (server) => {
@@ -43,7 +44,7 @@ export const RegisterForEvent: FastifyPluginAsyncZod = async (server) => {
       })
 
       if (attendeeForEmail !== null) {
-        throw new Error("this email is already registered for this event")
+        throw new BadRequest("this email is already registered for this event")
       }
 
       const [amountOfAttendeeForEvent, event] = await Promise.all([
@@ -66,7 +67,7 @@ export const RegisterForEvent: FastifyPluginAsyncZod = async (server) => {
         event?.maximumAttendees &&
         amountOfAttendeeForEvent >= event.maximumAttendees
       ) {
-        throw new Error(
+        throw new BadRequest(
           "The maximum number of attendees for this event has been reached."
         )
       }

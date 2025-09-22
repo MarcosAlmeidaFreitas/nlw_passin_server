@@ -3,6 +3,7 @@ import z from "zod"
 import { eventSchemaResponse } from "../@types/EventResponseSchemaZod.ts"
 import { prisma_client } from "../client/prisma_client.ts"
 import { HTTP_Status_Code } from "../status_code/index.ts"
+import { BadRequest } from "./_errors/badRequest.ts"
 
 export const getEvent: FastifyPluginAsyncZod = async (server) => {
   await server.get(
@@ -18,7 +19,7 @@ export const getEvent: FastifyPluginAsyncZod = async (server) => {
           200: z.object({
             event: eventSchemaResponse,
           }),
-          404: z.string(),
+          //404: z.string(),
         },
       },
     },
@@ -45,19 +46,19 @@ export const getEvent: FastifyPluginAsyncZod = async (server) => {
       })
 
       if (event === null) {
-        reply.status(HTTP_Status_Code.NOT_FOUND).send("Event not found")
-      } else {
-        reply.status(HTTP_Status_Code.OK).send({
-          event: {
-            id: event.id,
-            title: event.title,
-            details: event.details,
-            slug: event.slug,
-            maximumAttendees: event.maximumAttendees,
-            attendeesAmount: event._count.attendees,
-          },
-        })
+        //return reply.status(HTTP_Status_Code.NOT_FOUND).send("Event not found")
+        throw new BadRequest("Event not found")
       }
+      reply.status(HTTP_Status_Code.OK).send({
+        event: {
+          id: event.id,
+          title: event.title,
+          details: event.details,
+          slug: event.slug,
+          maximumAttendees: event.maximumAttendees,
+          attendeesAmount: event._count.attendees,
+        },
+      })
     }
   )
 }

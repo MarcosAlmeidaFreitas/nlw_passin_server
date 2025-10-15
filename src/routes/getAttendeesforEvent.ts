@@ -20,6 +20,7 @@ export const getAttendeesForEvent: FastifyPluginAsyncZod = async (server) => {
 
         response: {
           200: z.object({
+            totalAttendees: z.number(),
             attendees: z.array(
               z.object({
                 id: z.number(),
@@ -68,7 +69,21 @@ export const getAttendeesForEvent: FastifyPluginAsyncZod = async (server) => {
         },
       })
 
+      const totalAttendees = await prisma_client.attendee.count({
+        where: query
+          ? {
+              eventId,
+              name: {
+                contains: query,
+              },
+            }
+          : {
+              eventId,
+            },
+      })
+
       return reply.status(HTTP_Status_Code.OK).send({
+        totalAttendees,
         attendees: attendees.map((attendee) => {
           return {
             id: attendee.id,
